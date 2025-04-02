@@ -18,21 +18,29 @@ if (!$product) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Verify admin
+    if ($_SESSION['email'] !== 'admin@knitshop.com') {
+        header("Location: user-dashboard.php");
+        exit();
+    }
+
     $name = mysqli_real_escape_string($conn, $_POST['name']);
     $description = mysqli_real_escape_string($conn, $_POST['description']);
     $price = floatval($_POST['price']);
     $image_url = mysqli_real_escape_string($conn, $_POST['image_url']);
     $category = mysqli_real_escape_string($conn, $_POST['category']);
     
-    $update_sql = "UPDATE products SET 
-                  name = '$name',
-                  description = '$description',
-                  price = $price,
-                  image_url = '$image_url',
-                  category = '$category'
-                  WHERE id = $product_id";
+    // Use prepared statement
+    $stmt = mysqli_prepare($conn, "UPDATE products SET 
+            name = ?,
+            description = ?,
+            price = ?,
+            image_url = ?,
+            category = ?
+            WHERE id = ?");
+    mysqli_stmt_bind_param($stmt, "ssdssi", $name, $description, $price, $image_url, $category, $product_id);
     
-    if (mysqli_query($conn, $update_sql)) {
+    if (mysqli_stmt_execute($stmt)) {
         header("Location: admin-dashboard.php");
         exit();
     } else {
