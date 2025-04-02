@@ -15,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     if (mysqli_stmt_execute($stmt)) {
         $_SESSION['user_id'] = mysqli_insert_id($conn);
-        header("Location: admin-dashboard.php");
+        header("Location: user-dashboard.php");
         exit();
     } else {
         $error = "Registration failed: " . mysqli_error($conn);
