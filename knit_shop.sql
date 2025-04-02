@@ -26,6 +26,28 @@ CREATE TABLE IF NOT EXISTS products (
 INSERT INTO users (username, email, password) 
 VALUES ('admin', 'admin@knitshop.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi');
 
+-- Wishlist table
+CREATE TABLE IF NOT EXISTS wishlists (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    product_id INT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (product_id) REFERENCES products(id),
+    UNIQUE KEY (user_id, product_id)
+);
+
+-- Cart table
+CREATE TABLE IF NOT EXISTS carts (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    product_id INT NOT NULL,
+    quantity INT NOT NULL DEFAULT 1,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (product_id) REFERENCES products(id)
+);
+
 -- Sample products
 INSERT INTO products (name, description, price, image_url, category) VALUES
 ('Knitted Scarf', 'Soft and warm hand-knitted scarf in pastel colors', 24.99, 'https://images.pexels.com/photos/1021291/pexels-photo-1021291.jpeg', 'Scarves'),
