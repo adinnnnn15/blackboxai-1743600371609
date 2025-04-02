@@ -15,8 +15,24 @@ require 'config/session.php';
     <header class="bg-white bg-opacity-70 shadow-sm py-4">
         <div class="container mx-auto px-4 flex justify-between items-center">
             <h1 class="text-3xl font-bold text-pink-400">Knit Accessories</h1>
-            <nav>
+            <nav class="flex items-center space-x-4">
                 <?php if (isLoggedIn()): ?>
+                    <a href="pages/cart.php" class="relative p-2 text-pink-500 hover:text-pink-700">
+                        <i class="fas fa-shopping-cart text-xl"></i>
+                        <?php
+                        require 'config/db_config.php';
+                        $count = 0;
+                        if (isLoggedIn()) {
+                            $user_id = $_SESSION['user_id'];
+                            $result = mysqli_query($conn, "SELECT SUM(quantity) as count FROM carts WHERE user_id = $user_id");
+                            $row = mysqli_fetch_assoc($result);
+                            $count = $row['count'] ?? 0;
+                        }
+                        ?>
+                        <span class="absolute -top-1 -right-1 bg-pink-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                            <?= $count ?>
+                        </span>
+                    </a>
                     <a href="pages/user-dashboard.php" class="px-4 py-2 bg-pink-300 text-white rounded-lg hover:bg-pink-400 transition">Dashboard</a>
                 <?php else: ?>
                     <a href="pages/login.php" class="px-4 py-2 bg-pink-300 text-white rounded-lg hover:bg-pink-400 transition">Login</a>
