@@ -2,6 +2,12 @@
 require '../config/session.php';
 requireLogin();
 
+// Verify admin
+if ($_SESSION['email'] !== 'admin@knitshop.com') {
+    header("Location: user-dashboard.php");
+    exit();
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     require '../config/db_config.php';
     
@@ -11,14 +17,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $image_url = mysqli_real_escape_string($conn, $_POST['image_url']);
     $category = mysqli_real_escape_string($conn, $_POST['category']);
     
-    $sql = "INSERT INTO products (name, description, price, image_url, category) 
-            VALUES ('$name', '$description', $price, '$image_url', '$category')";
+    // Use prepared statement
+    $stmt = mysqli_prepare($conn, "INSERT INTO products (name, description, price, image_url, category) 
+            VALUES (?, ?, ?, ?, ?)");
+    mysqli_stmt_bind_param($stmt, "ssdss", $name, $description, $price, $image_url, $category);
     
-    if (mysqli_query($conn, $sql)) {
-        header("Location: admin-dashboard.php");
+    if (mysqli_stmt_execute($stmt)) {
+        header("Location: admin-dashboard.php?success=Product+added");
         exit();
     } else {
-        $error = "Failed to add product. Please try again.";
+        $error = "Failed to add product: " . mysqli_error($conn);
     }
 }
 ?>
