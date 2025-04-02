@@ -55,10 +55,22 @@ if (!$product) {
                     
                     <p class="text-gray-700 mb-6"><?php echo nl2br(htmlspecialchars($product['description'])); ?></p>
                     
-                    <div class="flex space-x-4">
-                        <button class="flex-1 bg-pink-400 hover:bg-pink-500 text-white py-2 px-4 rounded-lg transition">
-                            <i class="fas fa-shopping-cart mr-2"></i>Add to Cart
-                        </button>
+                    <div class="flex flex-col space-y-4 mb-4">
+                        <div class="flex space-x-4">
+                            <form method="POST" action="add-to-cart.php" class="flex-1">
+                                <input type="hidden" name="product_id" value="<?= $product['id'] ?>">
+                                <button type="submit" class="w-full bg-pink-400 hover:bg-pink-500 text-white py-2 px-4 rounded-lg transition">
+                                    <i class="fas fa-shopping-cart mr-2"></i>Add to Cart
+                                </button>
+                            </form>
+                            <form method="POST" action="wishlist-action.php" class="flex-1">
+                                <input type="hidden" name="product_id" value="<?= $product['id'] ?>">
+                                <input type="hidden" name="action" value="add">
+                                <button type="submit" class="w-full bg-blue-400 hover:bg-blue-500 text-white py-2 px-4 rounded-lg transition">
+                                    <i class="fas fa-heart mr-2"></i>Add to Wishlist
+                                </button>
+                            </form>
+                        </div>
                         <a href="../index.php" class="flex-1 text-center bg-gray-200 hover:bg-gray-300 text-gray-800 py-2 px-4 rounded-lg transition">
                             <i class="fas fa-arrow-left mr-2"></i>Back to Shop
                         </a>
