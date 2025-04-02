@@ -15,7 +15,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $user = mysqli_fetch_assoc($result);
         if (password_verify($password, $user['password'])) {
             $_SESSION['user_id'] = $user['id'];
-            header("Location: admin-dashboard.php");
+            // Redirect to appropriate dashboard based on user role
+            if ($email === 'admin@knitshop.com') {
+                header("Location: admin-dashboard.php");
+            } else {
+                header("Location: user-dashboard.php");
+            }
             exit();
         }
     }
