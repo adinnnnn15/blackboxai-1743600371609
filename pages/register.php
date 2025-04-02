@@ -9,15 +9,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = mysqli_real_escape_string($conn, $_POST['email']);
     $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
     
-    $sql = "INSERT INTO users (username, email, password) VALUES ('$username', '$email', '$password')";
+    // Use prepared statement to prevent SQL injection
+    $stmt = mysqli_prepare($conn, "INSERT INTO users (username, email, password) VALUES (?, ?, ?)");
+    mysqli_stmt_bind_param($stmt, "sss", $username, $email, $password);
     
-    if (mysqli_query($conn, $sql)) {
+    if (mysqli_stmt_execute($stmt)) {
         $_SESSION['user_id'] = mysqli_insert_id($conn);
         header("Location: admin-dashboard.php");
         exit();
     } else {
-        $error = "Registration failed. Please try again.";
+        $error = "Registration failed: " . mysqli_error($conn);
     }
+    mysqli_stmt_close($stmt);
 }
 ?>
 
