@@ -15,8 +15,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $user = mysqli_fetch_assoc($result);
         if (password_verify($password, $user['password'])) {
             $_SESSION['user_id'] = $user['id'];
-            // Redirect to appropriate dashboard based on user role
-            if ($email === 'admin@knitshop.com') {
+            // Redirect based on selected login type
+            $user_type = $_POST['user_type'] ?? 'user';
+            if ($email === 'admin@knitshop.com' && $user_type === 'admin') {
                 header("Location: admin-dashboard.php");
             } else {
                 header("Location: user-dashboard.php");
@@ -47,6 +48,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
         <?php endif; ?>
         
+        <div class="mb-4">
+            <label class="inline-flex items-center">
+                <input type="radio" name="user_type" value="user" checked class="form-radio text-pink-500">
+                <span class="ml-2">User Login</span>
+            </label>
+            <label class="inline-flex items-center ml-6">
+                <input type="radio" name="user_type" value="admin" class="form-radio text-pink-500">
+                <span class="ml-2">Admin Login</span>
+            </label>
+        </div>
         <form method="POST" class="space-y-4">
             <div>
                 <label for="email" class="block text-gray-700 mb-2">Email</label>
