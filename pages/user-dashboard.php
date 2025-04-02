@@ -44,10 +44,17 @@ $user_data = mysqli_fetch_assoc($user);
                     <h3 class="font-medium text-pink-600 mb-2"><i class="fas fa-shopping-cart mr-2"></i>Your Orders</h3>
                     <p class="text-gray-600">View and track your orders</p>
                 </div>
-                <div class="bg-blue-50 p-4 rounded-lg">
+                <a href="wishlist.php" class="bg-blue-50 p-4 rounded-lg hover:bg-blue-100 transition">
                     <h3 class="font-medium text-blue-600 mb-2"><i class="fas fa-heart mr-2"></i>Wishlist</h3>
-                    <p class="text-gray-600">Your saved items</p>
-                </div>
+                    <p class="text-gray-600">View your saved items</p>
+                    <?php
+                    $count = 0;
+                    $result = mysqli_query($conn, "SELECT COUNT(*) as count FROM wishlists WHERE user_id = $user_id");
+                    $row = mysqli_fetch_assoc($result);
+                    $count = $row['count'];
+                    ?>
+                    <span class="text-xs text-blue-500"><?= $count ?> items</span>
+                </a>
                 <div class="bg-purple-50 p-4 rounded-lg">
                     <h3 class="font-medium text-purple-600 mb-2"><i class="fas fa-cog mr-2"></i>Account Settings</h3>
                     <p class="text-gray-600">Manage your preferences</p>
