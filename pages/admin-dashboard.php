@@ -35,6 +35,16 @@ $result = mysqli_query($conn, $sql);
     </header>
 
     <main class="container mx-auto px-4 py-8">
+        <?php if (isset($_GET['success'])): ?>
+            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
+                <?= htmlspecialchars(urldecode($_GET['success'])) ?>
+            </div>
+        <?php endif; ?>
+        <?php if (isset($_GET['error'])): ?>
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+                <?= htmlspecialchars(urldecode($_GET['error'])) ?>
+            </div>
+        <?php endif; ?>
         <div class="bg-white bg-opacity-80 rounded-lg shadow-md p-6">
             <h2 class="text-xl font-semibold text-gray-700 mb-6">Manage Products</h2>
             
